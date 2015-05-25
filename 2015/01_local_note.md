@@ -1,4 +1,5 @@
 ---
+title: Local note taking system using vim + markdown + jekyll
 ---
 
 # Local note taking system using vim + markdown + jekyll

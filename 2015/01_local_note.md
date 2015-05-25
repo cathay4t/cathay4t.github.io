@@ -209,6 +209,7 @@ konsole -e vim ~/notes/misc/tmp.md
 ```
 
 * Show markdown headers in vim taglist
+
   If you are [taglist][10] user, create `~/.ctags` like this:
 
 ```

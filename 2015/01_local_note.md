@@ -273,7 +273,7 @@ fi
 ### 4.5. TOC(Table of content)
 
   Jekyll redcarpet does not support auto generate TOC yet.
-  I create a perl script [gen_md_toc][7] to do so:
+  I create a perl script [`gen_md_toc`][7] to do so:
 
 ```
 curl http://localhost:4000/2015/01_local_note.html | gen_md_toc

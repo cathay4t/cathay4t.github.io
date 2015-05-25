@@ -8,7 +8,7 @@
 * [3. How to build it][03]
 * [4. Tips][04]
 * [5. PLEASE DO BACKUP YOUR DATA!!!][05]
-* [7. Useful Links][07]
+* [6. Useful Links][06]
 
 Real appreciate the great note taking software [basket][1] created
 by Sébastien Laoût and others. It's the only qt3 software I am still
@@ -310,7 +310,7 @@ curl http://localhost:4000/2015/01_local_note.html | gen_md_toc
 **PLEASE CREATE OFFLINE BACKUP ALSO!!!**
 
 
-## 7. Useful Links
+## 6. Useful Links
 
 * [Jekyllrb document][11]
 * [GitHub: Using Jekyll with Pages][12]
@@ -329,7 +329,7 @@ curl http://localhost:4000/2015/01_local_note.html | gen_md_toc
 [0405]: #4.5.-toc(table-of-content)
 [0406]: #4.6.-sync-to-other-location.
 [05]: #5.-please-do-backup-your-data!!!
-[07]: #7.-useful-links
+[06]: #6.-useful-links
 
 [1]: http://basket.kde.org/
 [2]: http://libstorage.github.io/libstoragemgmt-doc/

@@ -266,7 +266,7 @@ fi
   Add this line to `crontab -e`:
 
 ```
-*/30 * * * * /home/fge/bin/jk_note_git_auto_commit.sh
+*/30 * * * * /home/fge/bin/jk_note_git_auto_commit.sh 1>/dev/null
 ```
 
 

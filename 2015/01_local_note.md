@@ -316,21 +316,21 @@ curl http://localhost:4000/2015/01_local_note.html | gen_md_toc
 * [Jekyllrb document][11]
 * [GitHub: Using Jekyll with Pages][12]
 
-[01]: #1.-how-it-looks
-[02]: #2.-how-it-works
-[03]: #3.-how-to-build-it
-[0301]: #3.1.-prerequisite
-[0302]: #3.2.-choose-page-layout.
-[0303]: #3.3.-customize-local-jekyll
-[04]: #4.-tips
-[0401]: #4.1.-display-liquid-code-in-jekyll
-[0402]: #4.2.-quickly-note-something-down.
-[0403]: #4.3.-show-markdown-headers-in-vim-taglist
-[0404]: #4.4.-use-git-to-trace-all-changes.
-[0405]: #4.5.-toc(table-of-content)
-[0406]: #4.6.-sync-to-other-location.
-[05]: #5.-please-do-backup-your-data!!!
-[06]: #6.-useful-links
+[01]: #1-how-it-looks
+[02]: #2-how-it-works
+[03]: #3-how-to-build-it
+[0301]: #3-1-prerequisite
+[0302]: #3-2-choose-page-layout
+[0303]: #3-3-customize-local-jekyll
+[04]: #4-tips
+[0401]: #4-1-display-liquid-code-in-jekyll
+[0402]: #4-2-quickly-note-something-down
+[0403]: #4-3-show-markdown-headers-in-vim-taglist
+[0404]: #4-4-use-git-to-trace-all-changes
+[0405]: #4-5-toc-table-of-content
+[0406]: #4-6-sync-to-other-location
+[05]: #5-please-do-backup-your-data
+[06]: #6-useful-links
 
 [1]: http://basket.kde.org/
 [2]: http://libstorage.github.io/libstoragemgmt-doc/

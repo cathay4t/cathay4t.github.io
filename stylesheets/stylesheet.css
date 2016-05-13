@@ -12,7 +12,7 @@ body {
 
 .container {
   width: 90%;
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -108,17 +108,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #main_content h4 {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 #main_content h5 {
-  font-size: 12px;
+  font-size: 16px;
   text-transform: uppercase;
   margin: 0 0 5px 0;
 }
 
 #main_content h6 {
-  font-size: 12px;
+  font-size: 16px;
   text-transform: uppercase;
   color: #999;
   margin: 0 0 5px 0;
@@ -136,7 +136,7 @@ ul li {
 ul li:before {
   content: ">>";
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-  font-size: 13px;
+  font-size: 16px;
   color: #b5e853;
   margin-left: -37px;
   margin-right: 21px;
@@ -153,7 +153,7 @@ pre {
   background: rgba(0, 0, 0, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 10px;
-  font-size: 12px;
+  font-size: 16px;
   color: #18f018;
   border-radius: 2px;
   -moz-border-radius: 2px;
@@ -199,7 +199,7 @@ hr {
   color: rgba(255, 255, 255, 0.8);
   font-family: Helvetica, Arial, sans-serif;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 16px;
   text-decoration: none;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.75);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);

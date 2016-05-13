@@ -4,12 +4,8 @@ title: Local note taking system using vim + markdown + jekyll
 
 # Local note taking system using vim + markdown + jekyll
 
-* [1. How it looks][01]
-* [2. How it works][02]
-* [3. How to build it][03]
-* [4. Tips][04]
-* [5. PLEASE DO BACKUP YOUR DATA!!!][05]
-* [6. Useful Links][06]
+* TOC
+{:toc}
 
 Real appreciate the great note taking software [basket][1] created
 by Sébastien Laoût and others. It's the only qt3 software I am still
@@ -25,10 +21,8 @@ git pages and optimize it for note taking.
 
 ## 1. How it looks
 
-* Index page
-  ![index-page](../../images/2015/01_index_page.png)
-* Note page
-  ![note-page](../../images/2015/01_note_page.png)
+You are looking it right now. My note system is identical(except the contents)
+to current blog.
 
 ## 2. How it works
 
@@ -44,9 +38,6 @@ Quick notes:
 
 
 ## 3. How to build it
-* [3.1. Prerequisite][0301]
-* [3.2. Choose page layout.][0302]
-* [3.3. Customize local Jekyll][0303]
 
 I am using RHEL 7 for the flowing examples.
 
@@ -110,11 +101,9 @@ github pages generator.
   Edit `~/notes/_config.yml` like this
 
     ```
-    markdown: redcarpet
-    redcarpet:
-        extensions: ["tables", "autolink", "strikethrough",
-                     "space_after_headers", "with_toc_data",
-                     "fenced_code_blocks"]
+    markdown: kramdown
+
+    repository: unknown/repo
 
     defaults:
       -
@@ -191,12 +180,6 @@ github pages generator.
 
 
 ## 4. Tips
-* [4.1. Display Liquid code in Jekyll][0401]
-* [4.2. Quickly note something down.][0402]
-* [4.3. Show markdown headers in vim taglist][0403]
-* [4.4. Use git to trace all changes.][0404]
-* [4.5. TOC(Table of content)][0405]
-* [4.6. Sync to other location.][0406]
 
 ### 4.1. Display Liquid code in Jekyll
 
@@ -272,17 +255,11 @@ fi
 
 ### 4.5. TOC(Table of content)
 
-  Jekyll redcarpet does not support auto generate TOC yet.
-  I create a perl script [`gen_md_toc`][7] to do so:
+Just add these line into your markdown file:
 
 ```
-curl http://localhost:4000/2015/01_local_note.html | gen_md_toc
-```
-  It requires you to use this type of headers in markdown:
-
-```
-## 1. Some name
-### 1.1. Sub some name, alway use a dot after a number.
+ * TOC
+{:toc}
 ```
 
 ### 4.6. Sync to other location.
@@ -315,22 +292,6 @@ curl http://localhost:4000/2015/01_local_note.html | gen_md_toc
 
 * [Jekyllrb document][11]
 * [GitHub: Using Jekyll with Pages][12]
-
-[01]: #1-how-it-looks
-[02]: #2-how-it-works
-[03]: #3-how-to-build-it
-[0301]: #3-1-prerequisite
-[0302]: #3-2-choose-page-layout
-[0303]: #3-3-customize-local-jekyll
-[04]: #4-tips
-[0401]: #4-1-display-liquid-code-in-jekyll
-[0402]: #4-2-quickly-note-something-down
-[0403]: #4-3-show-markdown-headers-in-vim-taglist
-[0404]: #4-4-use-git-to-trace-all-changes
-[0405]: #4-5-toc-table-of-content
-[0406]: #4-6-sync-to-other-location
-[05]: #5-please-do-backup-your-data
-[06]: #6-useful-links
 
 [1]: http://basket.kde.org/
 [2]: http://libstorage.github.io/libstoragemgmt-doc/

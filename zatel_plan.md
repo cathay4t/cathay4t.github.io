@@ -23,10 +23,13 @@ layout: default
 
  * Use cache to eliminate duplicate call.
  * Use udev(or better uevent) for change monitoring.
- * Plugins could add new property to any existing interface.
+ * Plugins could add new property to any existing object.
+ * Plugins could override property to any existing object.
  * No license restriction on plugins.
    (Plugins are running in separate PID, only communicate with daemon via
     IPC socket)
+ * Daemon provides socket JSON API while other tools wrap it into dbus, REST,
+   C/Python API.
 
 ## 3. Quick user guide ##
 

@@ -70,6 +70,8 @@ Notification JSON format:
 
 ### 4.2. Disk ###
 
+TODO: Should support NVMe also.
+
 #### 4.2.1. Query Disks ####
 
 Command: `disk list [<disk_id>]`
@@ -79,7 +81,7 @@ Command: `disk list [<disk_id>]`
     "errno":                0,
     "strerror":             "OK",
     "errmsg":               "",
-    "id":                   "<vpd83_of_disk>",
+    "disk_id":              "<vpd83_of_disk>",
     "blk_paths":            ["/dev/sda", "/dev/sdb", "/dev/sdc"],
     "opt_io_size":          4096,
     "min_io_size":          512,
@@ -125,8 +127,10 @@ Command: `disk led fault [on|off] <id_of_disk>`
 
 #### 4.2.4. Query partitions ####
 
-TODO: should we need a class named `part` here, and how multipath override
-its `blk_path`?
+TODO: Need find a way to allow multipath override partition's `blk_path`.
+TODO: Need new class for partition so that filesystem and lvm pv could link
+      against it.
+TODO: Need a new way to allow search `blk_path`, return `multipath list`
 
 Command: `disk part list <id_of_disk>`
 
@@ -145,6 +149,19 @@ For multipath disk, use command `multipath part list <mpath_id>` in stead.
     "end_sector":           1024000
 }
 ```
+### 4.2.5. Create Partitions ####
+Command:
+`disk part create <disk_id> <start_sector> <end_sector> [<auto_align_yes>]`
+
+```json
+{
+    "errno":                0,
+    "strerror":             "OK",
+    "errmsg":               "",
+    "part_id":              "<part_id>",
+    "blk_path":             "<blk_path>"
+}
+```
 
 ### 4.3. LVM ###
 
@@ -158,21 +175,8 @@ Command: `lvm list pv [<pv_id>]`
     "strerror":             "OK",
     "errmsg":               "",
     "id":                   "<uuid of PV>",
-    "blk_path":             "/dev/mapper/mpatha",
+    "backstore_blk_path":   "/dev/mapper/mpatha",
     "vg_id":                "<id_of_vg>"
-}
-```
-
-### 4.3.2. Create Partitions ####
-
-Command: `part create <disk_id> <start_sector> <end_sector> [<auto_align_yes>]
-
-```json
-{
-    "errno":                0,
-    "strerror":             "OK",
-    "errmsg":               "",
-    "id":                   "<part_id>"
 }
 ```
 

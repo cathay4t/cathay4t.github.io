@@ -97,10 +97,10 @@ Command: `disk list [<disk_id>]`
     "interface_type":       "ATA|SAS|SCSI|FC|iSCSI|NVMe",
     "interface_speed":      "6Gbps",
     "rotation_speed":       10000,
-    "part_ids":             ["<id_of_part>", ],
-    "mpath_id":             "<id_of_mpath>",
-    "fs_id":                "<id_of_fs>",
-    "pv_id":                "<id_of_pv>"
+    "part_ids":             ["<part_id>", ],
+    "mpath_id":             "<id_of_mpath> if is multipath",
+    "fs_id":                "<id_of_fs> if whole disk is used as file system",
+    "pv_id":                "<id_of_pv> if whole disk is used as LVM PV"
 }
 ```
 

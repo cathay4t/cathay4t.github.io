@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog of Gris</title>
+    <link>http://blog.grisge.info/</link>
+    <description>Recent content on Blog of Gris</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 22 Feb 2019 23:55:13 +0800</lastBuildDate>
+    
+	<atom:link href="http://blog.grisge.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>DRAFT/WIP: IPv6 Automatic Configuration in Linux</title>
+      <link>http://blog.grisge.info/posts/ipv6_autoconf_in_linux/</link>
+      <pubDate>Fri, 22 Feb 2019 23:55:13 +0800</pubDate>
+      
+      <guid>http://blog.grisge.info/posts/ipv6_autoconf_in_linux/</guid>
+      <description>In world of IPv4, DHCPv4 provides a perfect way for IPv4 automatic configuration including IP address, DNS and routing entires. In world of IPv6, above works has been split into types:
+ Stateless automatic configuration &amp;ndash; IPv6 Router Advertisement(IPv6-RA).
+ Stateful automatic configuration &amp;ndash; DHCPv6.
+  The IPv6-RA is designed to provides fundamental network configuration to host with minimum cost. The DHCPv6 is designed to provides additional and extensive network configuration.</description>
+    </item>
+    
+  </channel>
+</rss>

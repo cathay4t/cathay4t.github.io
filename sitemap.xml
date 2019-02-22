@@ -3,29 +3,29 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://blog.grisge.info/posts/ipv6_autoconf_in_linux/</loc>
+    <loc>https://blog.grisge.info/posts/ipv6_autoconf_in_linux/</loc>
     <lastmod>2019-02-22T23:55:13+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://blog.grisge.info/</loc>
-    <lastmod>2019-02-22T23:55:13+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.grisge.info/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://blog.grisge.info/posts/</loc>
+    <loc>https://blog.grisge.info/</loc>
     <lastmod>2019-02-22T23:55:13+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://blog.grisge.info/tags/</loc>
+    <loc>https://blog.grisge.info/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.grisge.info/posts/</loc>
+    <lastmod>2019-02-22T23:55:13+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.grisge.info/tags/</loc>
     <priority>0</priority>
   </url>
   

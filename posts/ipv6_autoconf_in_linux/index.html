@@ -39,19 +39,6 @@
     <div class="post-content">
       
 
-<!-- vim-markdown-toc GFM -->
-
-<ul>
-<li><a href="#ipv4-vs-ipv6-on-automatic-configuration">IPv4 vs IPv6 on Automatic Configuration</a></li>
-<li><a href="#server-side-configuration-dnsmasq">Server side configuration: dnsmasq</a></li>
-<li><a href="#server-side-configuration-radvd">Server side configuration: radvd</a></li>
-<li><a href="#client-side-configuration-using-nmstate">Client side configuration using nmstate</a></li>
-<li><a href="#client-side-configuration-using-networkmanager">Client side configuration using NetworkManager</a></li>
-<li><a href="#client-side-configuration-manually">Client side configuration manually</a></li>
-</ul>
-
-<!-- vim-markdown-toc -->
-
 <h2 id="ipv4-vs-ipv6-on-automatic-configuration">IPv4 vs IPv6 on Automatic Configuration</h2>
 
 <p>In world of IPv4, DHCPv4 provides a perfect way for IPv4 automatic
@@ -118,7 +105,7 @@ hosts.</li>
 </ul></li>
 </ul>
 
-<h2 id="server-side-configuration-dnsmasq">Server side configuration: dnsmasq</h2>
+<h3 id="server-side-configuration-dnsmasq">Server side configuration: dnsmasq</h3>
 
 <p>The <code>dnsmasq</code> project provide IPv6-RA and DHCPv6 with simple configuration for
 common use cases.</p>
@@ -172,7 +159,7 @@ Aliases:
 fed has IPv6 address 2001:db8:1::1f
 </code></pre>
 
-<h2 id="server-side-configuration-radvd">Server side configuration: radvd</h2>
+<h3 id="server-side-configuration-radvd">Server side configuration: radvd</h3>
 
 <p>The <code>radvd</code> provide feature-rich support of IPv6-RA and allowing you to do
 those thins which <code>dnsmasq</code> does not support yet:</p>
@@ -200,7 +187,7 @@ those thins which <code>dnsmasq</code> does not support yet:</p>
 };
 </code></pre>
 
-<h2 id="client-side-configuration-using-nmstate">Client side configuration using nmstate</h2>
+<h3 id="client-side-configuration-using-nmstate">Client side configuration using nmstate</h3>
 
 <p>The <code>nmstate</code> project provides simple way to set network state.</p>
 
@@ -232,7 +219,7 @@ interfaces:
 <p>Then you may use command <code>nmstatectl  show eth1</code> to get the current network
 state of <code>eth1</code>.</p>
 
-<h2 id="client-side-configuration-using-networkmanager">Client side configuration using NetworkManager</h2>
+<h3 id="client-side-configuration-using-networkmanager">Client side configuration using NetworkManager</h3>
 
 <p>With NetworkManager daemon running, the below simple command would enable both
 IPv4 and IPv6 automatic configuration on <code>eth1</code>:</p>
@@ -244,7 +231,9 @@ IPv4 and IPv6 automatic configuration on <code>eth1</code>:</p>
     +ipv6.method auto
 </code></pre>
 
-<h2 id="client-side-configuration-manually">Client side configuration manually</h2>
+<h3 id="client-side-configuration-manually">Client side configuration manually</h3>
+
+<p>TODO</p>
 
     </div>
   </article>

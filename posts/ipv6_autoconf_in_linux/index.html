@@ -33,11 +33,26 @@
         </div>
         <div>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          2 min read
+          4 min read
         </div></div>
     </header>
     <div class="post-content">
       
+
+<!-- vim-markdown-toc GFM -->
+
+<ul>
+<li><a href="#ipv4-vs-ipv6-on-automatic-configuration">IPv4 vs IPv6 on Automatic Configuration</a></li>
+<li><a href="#server-side-configuration-dnsmasq">Server side configuration: dnsmasq</a></li>
+<li><a href="#server-side-configuration-radvd">Server side configuration: radvd</a></li>
+<li><a href="#client-side-configuration-using-nmstate">Client side configuration using nmstate</a></li>
+<li><a href="#client-side-configuration-using-networkmanager">Client side configuration using NetworkManager</a></li>
+<li><a href="#client-side-configuration-manually">Client side configuration manually</a></li>
+</ul>
+
+<!-- vim-markdown-toc -->
+
+<h2 id="ipv4-vs-ipv6-on-automatic-configuration">IPv4 vs IPv6 on Automatic Configuration</h2>
 
 <p>In world of IPv4, DHCPv4 provides a perfect way for IPv4 automatic
 configuration including IP address, DNS and routing entires.
@@ -103,19 +118,133 @@ hosts.</li>
 </ul></li>
 </ul>
 
-<h2 id="todo">TODO</h2>
+<h2 id="server-side-configuration-dnsmasq">Server side configuration: dnsmasq</h2>
+
+<p>The <code>dnsmasq</code> project provide IPv6-RA and DHCPv6 with simple configuration for
+common use cases.</p>
+
+<p>For more detail, please refer to manpage of <code>dnsmasq</code>.
+A quick example would be:</p>
+
+<pre><code class="language-conf"># Enable IPv6-RA
+enable-ra
+# Use the IPv6 prefix on eth1 interaface, and 0x1 to 0xff as DHCPv6 range.
+dhcp-range=tag:eth1,::1,::ff,constructor:eth1,ra-names,64,48h
+</code></pre>
+
+<p>Above configuration are using <code>ra-names</code> method for DHCP range, as a result,
+the host will get:
+ * A /64 address generated using <a href="https://tools.ietf.org/html/rfc4862">SLAAC</a> algorithm. Ignore the
+   DHCPv6 range setting.
+ * A /128 address chose by DHCPv6 server from above DHCPv6 range.
+   And this address if pingable, will be the DNS AAAA entry for the host.
+ * The DNS options and defaults routes get from IPv6-RA.
+   Host might use DHCPv6 for DNS option if <a href="https://tools.ietf.org/html/rfc8106">DNS RA options</a>
+   is not supported.</p>
+
+<p>Example output on the host(The DHCPv6 server has the <code>2001:db8:1::1</code> address):</p>
+
+<pre><code>[fge@fed ~]$ ip -6 addr show dev  ens10
+3: ens10: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1280 state UP qlen 1000
+    inet6 2001:db8:1::1f/128 scope global dynamic noprefixroute
+       valid_lft 6932sec preferred_lft 6632sec
+    inet6 2001:db8:1:0:415b:bc93:c47b:76c8/64 scope global dynamic noprefixroute
+       valid_lft 172754sec preferred_lft 172754sec
+    inet6 fe80::db63:c3ff:b814:f4e2/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+
+[fge@fed ~]$ ip -6 route show dev ens10
+2001:db8:1::1f proto kernel metric 102 pref medium
+2001:db8:1::/64 proto ra metric 102 pref medium
+fe80::/64 proto kernel metric 102 pref medium
+default via fe80::be2b:a3e2:2b5a:2e7d proto ra metric 102 pref medium
+
+[fge@fed ~]$ cat /etc/resolv.conf |grep :
+nameserver fe80::be2b:a3e2:2b5a:2e7d%ens10
+nameserver 2001:db8:1::1
+
+[fge@fed ~]$ host -t AAAA fed 2001:db8:1::1
+Using domain server:
+Name: 2001:db8:1::1
+Address: 2001:db8:1::1#53
+Aliases:
+
+fed has IPv6 address 2001:db8:1::1f
+</code></pre>
+
+<h2 id="server-side-configuration-radvd">Server side configuration: radvd</h2>
+
+<p>The <code>radvd</code> provide feature-rich support of IPv6-RA and allowing you to do
+those thins which <code>dnsmasq</code> does not support yet:</p>
 
 <ul>
-<li><p>Add dnsmasq config.</p></li>
-
-<li><p>Add RADVD config.</p></li>
-
-<li><p>Add example lab setup and outputs.</p></li>
-
-<li><p>Add NetworkManager example on configuring IPv6 auto conf.</p></li>
-
-<li><p>Add nmstate example on IPv6 auto conf.</p></li>
+<li>Advertise more routes.</li>
+<li>Customize IPv6-RA options.</li>
 </ul>
+
+<p>For more detail, please refer to manpage of <code>dnsmasq</code>.</p>
+
+<pre><code>interface eth1
+{
+    AdvSendAdvert on;
+    MinRtrAdvInterval 30;
+    MaxRtrAdvInterval 100;
+    prefix 2001:db8:1::/64 {    # Host will use SLAAC for this prefix
+        AdvOnLink on;
+        AdvAutonomous on;
+        AdvRouterAddr off;
+    };
+    route ::/0 {};              # Host will get default gateway
+    route 2001:db8:f::/64 {};   # Host will get this optional stateless route
+    RDNSS 2001:db8:1::1 {};     # Host will get nameserver as 2001:db8:1::1
+};
+</code></pre>
+
+<h2 id="client-side-configuration-using-nmstate">Client side configuration using nmstate</h2>
+
+<p>The <code>nmstate</code> project provides simple way to set network state.</p>
+
+<p>For example: to enable auto configuration on eth1 for IPv4 and IPv6:</p>
+
+<pre><code class="language-bash">echo '
+---
+interfaces:
+- name: eth1
+  type: ethernet
+  state: up
+  ipv4:
+    dhcp: true
+    auto-dns: true
+    auto-gateway: true
+    auto-routes: true
+    enabled: true
+  ipv6:
+    autoconf: true
+    dhcp: true
+    auto-dns: true
+    auto-gateway: true
+    auto-routes: true
+    enabled: true
+  mtu: 1500
+' | sudo nmstatectl set -
+</code></pre>
+
+<p>Then you may use command <code>nmstatectl  show eth1</code> to get the current network
+state of <code>eth1</code>.</p>
+
+<h2 id="client-side-configuration-using-networkmanager">Client side configuration using NetworkManager</h2>
+
+<p>With NetworkManager daemon running, the below simple command would enable both
+IPv4 and IPv6 automatic configuration on <code>eth1</code>:</p>
+
+<pre><code class="language-bash">sudo nmcli connection add type ethernet \
+    ifname eth1 \
+    +connection.id auto-eth1 \
+    +ipv4.method auto \
+    +ipv6.method auto
+</code></pre>
+
+<h2 id="client-side-configuration-manually">Client side configuration manually</h2>
 
     </div>
   </article>

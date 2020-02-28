@@ -1,23 +1,45 @@
 <!doctype html>
-<html>
+<html lang="en-us">
   <head>
     <title>DRAFT/WIP: IPv6 Automatic Configuration in Linux // Blog of Gris</title>
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.54.0" />
+    <meta name="generator" content="Hugo 0.65.3" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Gris Ge &lt;cnfourt@gmail.com&gt;" />
     <meta name="description" content="" />
-    <base href="https://blog.grisge.info/" />
     <link rel="stylesheet" href="https://blog.grisge.info/css/main.min.2ad57c7eb88a4790cf09c0a856e5eec68afdfc1b2944c5e34274999801a3dec8.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="DRAFT/WIP: IPv6 Automatic Configuration in Linux"/>
+<meta name="twitter:description" content="IPv4 vs IPv6 on Automatic Configuration In world of IPv4, DHCPv4 provides a perfect way for IPv4 automatic configuration including IP address, DNS and routing entires. In world of IPv6, above works has been split into types:
+  Stateless automatic configuration &ndash; IPv6 Router Advertisement(IPv6-RA).
+  Stateful automatic configuration &ndash; DHCPv6.
+  The IPv6-RA is designed to provides fundamental network configuration to host with minimum cost. The DHCPv6 is designed to provides additional and extensive network configuration."/>
+
+    <meta property="og:title" content="DRAFT/WIP: IPv6 Automatic Configuration in Linux" />
+<meta property="og:description" content="IPv4 vs IPv6 on Automatic Configuration In world of IPv4, DHCPv4 provides a perfect way for IPv4 automatic configuration including IP address, DNS and routing entires. In world of IPv6, above works has been split into types:
+  Stateless automatic configuration &ndash; IPv6 Router Advertisement(IPv6-RA).
+  Stateful automatic configuration &ndash; DHCPv6.
+  The IPv6-RA is designed to provides fundamental network configuration to host with minimum cost. The DHCPv6 is designed to provides additional and extensive network configuration." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.grisge.info/posts/ipv6_autoconf_in_linux/" />
+<meta property="article:published_time" content="2019-02-22T23:55:13+08:00" />
+<meta property="article:modified_time" content="2019-02-22T23:55:13+08:00" />
+
+
   </head>
   <body>
     <header class="app-header">
-      <a href="/"><img class="app-header-avatar" src="./avatar.jpg" /></a>
+      <a href="https://blog.grisge.info/"><img class="app-header-avatar" src="/avatar.jpg" alt="Gris Ge &lt;cnfourt@gmail.com&gt;" /></a>
       <h1>Blog of Gris</h1>
       <p>Some people dream of success, while other people get up every morning and make it happen.</p>
       <div class="app-header-social">
         
-          <a target="_blank" href="https://github.com/cathay4t"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+          <a target="_blank" href="https://github.com/cathay4t" rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
         
       </div>
     </header>
@@ -28,100 +50,93 @@
       <h1 class ="post-title">DRAFT/WIP: IPv6 Automatic Configuration in Linux</h1>
       <div class="post-meta">
         <div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
           Feb 22, 2019
         </div>
         <div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
           4 min read
         </div></div>
     </header>
     <div class="post-content">
-      
-
-<h2 id="ipv4-vs-ipv6-on-automatic-configuration">IPv4 vs IPv6 on Automatic Configuration</h2>
-
+      <h2 id="ipv4-vs-ipv6-on-automatic-configuration">IPv4 vs IPv6 on Automatic Configuration</h2>
 <p>In world of IPv4, DHCPv4 provides a perfect way for IPv4 automatic
 configuration including IP address, DNS and routing entires.
 In world of IPv6, above works has been split into types:</p>
-
 <ul>
-<li><p>Stateless automatic configuration &ndash;
-<a href="https://tools.ietf.org/html/rfc4861">IPv6 Router Advertisement(IPv6-RA)</a>.</p></li>
-
-<li><p>Stateful automatic configuration &ndash; <a href="https://tools.ietf.org/html/rfc8415">DHCPv6</a>.</p></li>
+<li>
+<p>Stateless automatic configuration &ndash;
+<a href="https://tools.ietf.org/html/rfc4861">IPv6 Router Advertisement(IPv6-RA)</a>.</p>
+</li>
+<li>
+<p>Stateful automatic configuration &ndash; <a href="https://tools.ietf.org/html/rfc8415">DHCPv6</a>.</p>
+</li>
 </ul>
-
 <p>The IPv6-RA is designed to provides fundamental network configuration to host
 with minimum cost.
 The DHCPv6 is designed to provides additional and extensive network
 configuration.</p>
-
 <p>Since DHCPv6 <a href="https://datatracker.ietf.org/doc/draft-ietf-mif-dhcpv6-route-option/">does not provides routing configuration</a>,
 IPv6-RA is mandatory in order to serve the automatic IPv6 configuration.</p>
-
 <p>The brief difference between IPv6-RA and DHCPv6 are:</p>
-
 <pre><code>    |            |  IPv6-RA |   DHCPv6  |
     +------------+----------+-----------+
     | IP Address |  /64     | /128      |
     | Routing    | Yes      | No        |
     | DNS        | Yes      | Yes       |
     | NTP        | No       | Yes       |
-</code></pre>
-
-<ul>
-<li><p>IP Address configuration</p>
-
+</code></pre><ul>
+<li>
+<p>IP Address configuration</p>
 <ul>
 <li>IPv6-RA: Host use <a href="https://tools.ietf.org/html/rfc4862">SLAAC</a> to generate IP address from
 router provided /64 prefix.</li>
 <li>DHCPv6: DHCPv6 server provides hosts a /128 address which could be used
 to create the DNS AAAA entry for the acknowledged host.</li>
-</ul></li>
-
-<li><p>DNS Configuration</p>
-
+</ul>
+</li>
+<li>
+<p>DNS Configuration</p>
 <ul>
 <li>IPv6-RA: Host use <a href="https://tools.ietf.org/html/rfc8106">IPv6-RA DNS RA options</a> to get DNS
 configuration from route.</li>
 <li>DHCPv6: DHCP server provides the DNS configuration to hosts.</li>
-</ul></li>
-
-<li><p>Routing</p>
-
+</ul>
+</li>
+<li>
+<p>Routing</p>
 <ul>
 <li>IPv6-RA: Host use Router Advertisements</li>
 <li>DHCPv6: <a href="https://datatracker.ietf.org/doc/draft-ietf-mif-dhcpv6-route-option/">Not standardized</a>, hence DHCPv6 should not
 provide routing information.</li>
-</ul></li>
-
-<li><p>NTP:</p>
-
+</ul>
+</li>
+<li>
+<p>NTP:</p>
 <ul>
 <li>IPv6-RA: Do not provide NTP time server configuration.</li>
 <li>DHCPv6: DHCP server <a href="https://tools.ietf.org/html/rfc5908">provides</a> the NTP configuration to
 hosts.</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h3 id="server-side-configuration-dnsmasq">Server side configuration: dnsmasq</h3>
-
 <p>The <code>dnsmasq</code> project provides IPv6-RA and DHCPv6 with simple configuration for
 common use cases.</p>
-
 <p>For more detail, please refer to manpage of <code>dnsmasq</code>.
 A quick example would be:</p>
-
-<pre><code class="language-conf"># Enable IPv6-RA
+<pre><code class="language-conf" data-lang="conf"># Enable IPv6-RA
 enable-ra
 # Use the IPv6 prefix on eth1 interaface, and 0x1 to 0xff as DHCPv6 range.
 dhcp-range=tag:eth1,::1,::ff,constructor:eth1,ra-names,64,48h
-</code></pre>
-
-<p>Above configuration are using <code>ra-names</code> method for DHCP range, as a result,
+</code></pre><p>Above configuration are using <code>ra-names</code> method for DHCP range, as a result,
 the host will get:</p>
-
 <ul>
 <li>A /64 address generated using <a href="https://tools.ietf.org/html/rfc4862">SLAAC</a> algorithm. Ignore the
 DHCPv6 range setting.</li>
@@ -131,9 +146,7 @@ And this address if pingable, will be the DNS AAAA entry for the host.</li>
 Host might use DHCPv6 for DNS option if <a href="https://tools.ietf.org/html/rfc8106">DNS RA options</a>
 is not supported.</li>
 </ul>
-
 <p>Example output on the host(The DHCPv6 server has the <code>2001:db8:1::1</code> address):</p>
-
 <pre><code>[fge@fed ~]$ ip -6 addr show dev  ens10
 3: ens10: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1280 state UP qlen 1000
     inet6 2001:db8:1::1f/128 scope global dynamic noprefixroute
@@ -160,20 +173,14 @@ Address: 2001:db8:1::1#53
 Aliases:
 
 fed has IPv6 address 2001:db8:1::1f
-</code></pre>
-
-<h3 id="server-side-configuration-radvd">Server side configuration: radvd</h3>
-
+</code></pre><h3 id="server-side-configuration-radvd">Server side configuration: radvd</h3>
 <p>The <code>radvd</code> provide feature-rich support of IPv6-RA and allowing you to do
 those thins which <code>dnsmasq</code> does not support yet:</p>
-
 <ul>
 <li>Advertise more routes.</li>
 <li>Customize IPv6-RA options.</li>
 </ul>
-
 <p>For more detail, please refer to manpage of <code>dnsmasq</code>.</p>
-
 <pre><code>interface eth1
 {
     AdvSendAdvert on;
@@ -188,56 +195,46 @@ those thins which <code>dnsmasq</code> does not support yet:</p>
     route 2001:db8:f::/64 {};   # Host will get this optional stateless route
     RDNSS 2001:db8:1::1 {};     # Host will get nameserver as 2001:db8:1::1
 };
-</code></pre>
-
-<h3 id="client-side-configuration-using-nmstate">Client side configuration using nmstate</h3>
-
+</code></pre><h3 id="client-side-configuration-using-nmstate">Client side configuration using nmstate</h3>
 <p>The <code>nmstate</code> project provides simple way to set network state.</p>
-
 <p>For example: to enable auto configuration on eth1 for IPv4 and IPv6:</p>
-
-<pre><code class="language-bash">echo '
----
-interfaces:
-- name: eth1
-  type: ethernet
-  state: up
-  ipv4:
-    dhcp: true
-    auto-dns: true
-    auto-gateway: true
-    auto-routes: true
-    enabled: true
-  ipv6:
-    autoconf: true
-    dhcp: true
-    auto-dns: true
-    auto-gateway: true
-    auto-routes: true
-    enabled: true
-  mtu: 1500
-' | sudo nmstatectl set -
-</code></pre>
-
-<p>Then you may use command <code>nmstatectl  show eth1</code> to get the current network
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">echo <span style="color:#e6db74">&#39;
+</span><span style="color:#e6db74">---
+</span><span style="color:#e6db74">interfaces:
+</span><span style="color:#e6db74">- name: eth1
+</span><span style="color:#e6db74">  type: ethernet
+</span><span style="color:#e6db74">  state: up
+</span><span style="color:#e6db74">  ipv4:
+</span><span style="color:#e6db74">    dhcp: true
+</span><span style="color:#e6db74">    auto-dns: true
+</span><span style="color:#e6db74">    auto-gateway: true
+</span><span style="color:#e6db74">    auto-routes: true
+</span><span style="color:#e6db74">    enabled: true
+</span><span style="color:#e6db74">  ipv6:
+</span><span style="color:#e6db74">    autoconf: true
+</span><span style="color:#e6db74">    dhcp: true
+</span><span style="color:#e6db74">    auto-dns: true
+</span><span style="color:#e6db74">    auto-gateway: true
+</span><span style="color:#e6db74">    auto-routes: true
+</span><span style="color:#e6db74">    enabled: true
+</span><span style="color:#e6db74">  mtu: 1500
+</span><span style="color:#e6db74">&#39;</span> | sudo nmstatectl set -
+</code></pre></div><p>Then you may use command <code>nmstatectl  show eth1</code> to get the current network
 state of <code>eth1</code>.</p>
-
 <h3 id="client-side-configuration-using-networkmanager">Client side configuration using NetworkManager</h3>
-
 <p>With NetworkManager daemon running, the below simple command would enable both
 IPv4 and IPv6 automatic configuration on <code>eth1</code>:</p>
-
-<pre><code class="language-bash">sudo nmcli connection add type ethernet \
-    ifname eth1 \
-    +connection.id auto-eth1 \
-    +ipv4.method auto \
-    +ipv6.method auto
-</code></pre>
-
-<h3 id="client-side-configuration-manually">Client side configuration manually</h3>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo nmcli connection add type ethernet <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    ifname eth1 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    +connection.id auto-eth1 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    +ipv4.method auto <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    +ipv6.method auto
+</code></pre></div><h3 id="client-side-configuration-manually">Client side configuration manually</h3>
 <p>TODO</p>
 
+    </div>
+    <div class="post-footer">
+      
     </div>
   </article>
 

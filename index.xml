@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blog of Gris</title>
@@ -6,10 +6,19 @@
     <description>Recent content on Blog of Gris</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 22 Feb 2019 23:55:13 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 28 Feb 2020 08:09:14 +0800</lastBuildDate>
     
 	<atom:link href="https://blog.grisge.info/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Thinkpad: Turnoff the mic mute, sound mute and power button LEDs</title>
+      <link>https://blog.grisge.info/posts/disable_thinkpad_leds/</link>
+      <pubDate>Fri, 28 Feb 2020 08:09:14 +0800</pubDate>
+      
+      <guid>https://blog.grisge.info/posts/disable_thinkpad_leds/</guid>
+      <description>Thinkpad: Turnoff the mic mute, sound mute and power button LEDs SYSFS_THINKPAD_LED=&amp;#34;/sys/devices/platform/thinkpad_acpi/leds&amp;#34; for LED in platform::mute platform::micmute tpacpi::power; do echo 0 | sudo tee &amp;#34;$SYSFS_THINKPAD_LED/$LED/brightness&amp;#34; done </description>
+    </item>
     
     <item>
       <title>DRAFT/WIP: IPv6 Automatic Configuration in Linux</title>
@@ -18,8 +27,8 @@
       
       <guid>https://blog.grisge.info/posts/ipv6_autoconf_in_linux/</guid>
       <description>IPv4 vs IPv6 on Automatic Configuration In world of IPv4, DHCPv4 provides a perfect way for IPv4 automatic configuration including IP address, DNS and routing entires. In world of IPv6, above works has been split into types:
- Stateless automatic configuration &amp;ndash; IPv6 Router Advertisement(IPv6-RA).
- Stateful automatic configuration &amp;ndash; DHCPv6.
+  Stateless automatic configuration &amp;ndash; IPv6 Router Advertisement(IPv6-RA).
+  Stateful automatic configuration &amp;ndash; DHCPv6.
   The IPv6-RA is designed to provides fundamental network configuration to host with minimum cost. The DHCPv6 is designed to provides additional and extensive network configuration.</description>
     </item>
     

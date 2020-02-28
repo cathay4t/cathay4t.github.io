@@ -1,6 +1,21 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://blog.grisge.info/</loc>
+    <lastmod>2020-02-28T08:09:14+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.grisge.info/posts/</loc>
+    <lastmod>2020-02-28T08:09:14+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.grisge.info/posts/disable_thinkpad_leds/</loc>
+    <lastmod>2020-02-28T08:09:14+08:00</lastmod>
+  </url>
   
   <url>
     <loc>https://blog.grisge.info/posts/ipv6_autoconf_in_linux/</loc>
@@ -8,25 +23,11 @@
   </url>
   
   <url>
-    <loc>https://blog.grisge.info/</loc>
-    <lastmod>2019-02-22T23:55:13+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.grisge.info/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://blog.grisge.info/posts/</loc>
-    <lastmod>2019-02-22T23:55:13+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
     <loc>https://blog.grisge.info/tags/</loc>
-    <priority>0</priority>
   </url>
   
 </urlset>

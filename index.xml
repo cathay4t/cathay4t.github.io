@@ -17,7 +17,7 @@
       <pubDate>Fri, 28 Feb 2020 08:09:14 +0800</pubDate>
       
       <guid>https://blog.grisge.info/posts/disable_thinkpad_leds/</guid>
-      <description>Thinkpad: Turnoff the mic mute, sound mute and power button LEDs SYSFS_THINKPAD_LED=&amp;#34;/sys/devices/platform/thinkpad_acpi/leds&amp;#34; for LED in platform::mute platform::micmute tpacpi::power; do echo 0 | sudo tee &amp;#34;$SYSFS_THINKPAD_LED/$LED/brightness&amp;#34; done </description>
+      <description>Thinkpad: Turnoff the mic mute, sound mute and power button LEDs #!/bin/bash SYSFS_THINKPAD_LED=&amp;#34;/sys/devices/platform/thinkpad_acpi/leds&amp;#34; for LED in platform::mute platform::micmute tpacpi::power; do echo 0 | sudo tee &amp;#34;$SYSFS_THINKPAD_LED/$LED/brightness&amp;#34; done </description>
     </item>
     
     <item>

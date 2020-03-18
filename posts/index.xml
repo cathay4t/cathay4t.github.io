@@ -12,6 +12,17 @@
     
     
     <item>
+      <title>Git: rebase and sync with upstream</title>
+      <link>https://blog.grisge.info/posts/git_rebase_and_sync_with_upstream/</link>
+      <pubDate>Fri, 28 Feb 2020 08:09:14 +0800</pubDate>
+      
+      <guid>https://blog.grisge.info/posts/git_rebase_and_sync_with_upstream/</guid>
+      <description>Git: rebase and sync with upstream I have been asked to do rebase on git branch a lot, so I create some scripts to help me so.
+First of all, assuming your git repo is a clone of upstream. Please add upstream git link to your current git repo:
+git remote add upstream &amp;lt;link_to_upstream.git&amp;gt; Then place this script in your $PATH(for example: $HOME/bin) as git_sync_upstream which will sync origin/master with upstream/master.</description>
+    </item>
+    
+    <item>
       <title>Thinkpad: Turnoff the mic mute, sound mute and power button LEDs</title>
       <link>https://blog.grisge.info/posts/disable_thinkpad_leds/</link>
       <pubDate>Fri, 28 Feb 2020 08:09:14 +0800</pubDate>

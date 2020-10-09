@@ -8,12 +8,12 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 03 Jun 2020 10:55:16 +0800</lastBuildDate><atom:link href="https://blog.grisge.info/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Thinkpad: Turnoff the mic mute, sound mute and power button LEDs</title>
+      <title>Nispor: Varlink interface for querying network state</title>
       <link>https://blog.grisge.info/posts/nispor_intro/</link>
       <pubDate>Wed, 03 Jun 2020 10:55:16 +0800</pubDate>
       
       <guid>https://blog.grisge.info/posts/nispor_intro/</guid>
-      <description>Varlink interface for querying network state WIP</description>
+      <description>WIP</description>
     </item>
     
     <item>

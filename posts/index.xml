@@ -6,10 +6,15 @@
     <description>Recent content in Posts on Blog of Gris</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Mar 2020 01:04:35 +0800</lastBuildDate>
-    
-	<atom:link href="https://blog.grisge.info/posts/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Wed, 03 Jun 2020 10:55:16 +0800</lastBuildDate><atom:link href="https://blog.grisge.info/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Thinkpad: Turnoff the mic mute, sound mute and power button LEDs</title>
+      <link>https://blog.grisge.info/posts/nispor_intro/</link>
+      <pubDate>Wed, 03 Jun 2020 10:55:16 +0800</pubDate>
+      
+      <guid>https://blog.grisge.info/posts/nispor_intro/</guid>
+      <description>Varlink interface for querying network state WIP</description>
+    </item>
     
     <item>
       <title>Git: rebase and sync with upstream</title>
@@ -32,7 +37,7 @@ git remote add upstream &amp;lt;link_to_upstream.git&amp;gt; Then place this scr
     </item>
     
     <item>
-      <title>DRAFT/WIP: IPv6 Automatic Configuration in Linux</title>
+      <title>IPv6 Automatic Configuration in Linux</title>
       <link>https://blog.grisge.info/posts/ipv6_autoconf_in_linux/</link>
       <pubDate>Fri, 22 Feb 2019 23:55:13 +0800</pubDate>
       

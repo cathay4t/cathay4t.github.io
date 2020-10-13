@@ -25,9 +25,10 @@ Why Nispor In short, existing solutions is not simple enough:
       <pubDate>Thu, 19 Mar 2020 01:04:35 +0800</pubDate>
       
       <guid>https://blog.grisge.info/posts/git_rebase_and_sync_with_upstream/</guid>
-      <description>Git: rebase and sync with upstream I have been asked to do rebase on git branch a lot, so I create some scripts to help me so.
+      <description>I have been asked to do rebase on git branch a lot, so I create some scripts to help me so.
 First of all, assuming your git repo is a clone of upstream. Please add upstream git link to your current git repo:
-git remote add upstream &amp;lt;link_to_upstream.git&amp;gt; Then place this script in your $PATH(for example: $HOME/bin) as git_sync_upstream which will sync origin/master with upstream/master.</description>
+git remote add upstream &amp;lt;link_to_upstream.git&amp;gt; Then place this script in your $PATH(for example: $HOME/bin) as git_sync_upstream which will sync origin with upstream.
+#!/bin/bash -x #!/bin/bash -x if [ &amp;#34;CHK$(git branch|grep &amp;#39; master&amp;#39; )&amp;#34; !</description>
     </item>
     
     <item>

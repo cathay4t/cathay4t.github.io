@@ -12,14 +12,16 @@
     
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Git: rebase and sync with upstream"/>
-<meta name="twitter:description" content="Git: rebase and sync with upstream I have been asked to do rebase on git branch a lot, so I create some scripts to help me so.
+<meta name="twitter:description" content="I have been asked to do rebase on git branch a lot, so I create some scripts to help me so.
 First of all, assuming your git repo is a clone of upstream. Please add upstream git link to your current git repo:
-git remote add upstream &lt;link_to_upstream.git&gt; Then place this script in your $PATH(for example: $HOME/bin) as git_sync_upstream which will sync origin/master with upstream/master."/>
+git remote add upstream &lt;link_to_upstream.git&gt; Then place this script in your $PATH(for example: $HOME/bin) as git_sync_upstream which will sync origin with upstream.
+#!/bin/bash -x #!/bin/bash -x if [ &#34;CHK$(git branch|grep &#39; master&#39; )&#34; !"/>
 
     <meta property="og:title" content="Git: rebase and sync with upstream" />
-<meta property="og:description" content="Git: rebase and sync with upstream I have been asked to do rebase on git branch a lot, so I create some scripts to help me so.
+<meta property="og:description" content="I have been asked to do rebase on git branch a lot, so I create some scripts to help me so.
 First of all, assuming your git repo is a clone of upstream. Please add upstream git link to your current git repo:
-git remote add upstream &lt;link_to_upstream.git&gt; Then place this script in your $PATH(for example: $HOME/bin) as git_sync_upstream which will sync origin/master with upstream/master." />
+git remote add upstream &lt;link_to_upstream.git&gt; Then place this script in your $PATH(for example: $HOME/bin) as git_sync_upstream which will sync origin with upstream.
+#!/bin/bash -x #!/bin/bash -x if [ &#34;CHK$(git branch|grep &#39; master&#39; )&#34; !" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.grisge.info/posts/git_rebase_and_sync_with_upstream/" />
 <meta property="article:published_time" content="2020-03-19T01:04:35+08:00" />
@@ -64,25 +66,39 @@ git remote add upstream &lt;link_to_upstream.git&gt; Then place this script in y
       </div>
     </header>
     <div class="post-content">
-      <h2 id="git-rebase-and-sync-with-upstream">Git: rebase and sync with upstream</h2>
-<p>I have been asked to do rebase on git branch a lot, so I create some scripts
+      <p>I have been asked to do rebase on git branch a lot, so I create some scripts
 to help me so.</p>
 <p>First of all, assuming your git repo is a clone of upstream. Please add
 upstream git link to your current git repo:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git remote add upstream &lt;link_to_upstream.git&gt;
 </code></pre></div><p>Then place this script in your <code>$PATH</code>(for example: <code>$HOME/bin</code>) as
-<code>git_sync_upstream</code> which will sync <code>origin/master</code> with <code>upstream/master</code>.</p>
+<code>git_sync_upstream</code> which will sync <code>origin</code> with <code>upstream</code>.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash -x
-</span><span style="color:#75715e"></span>git commit  -m<span style="color:#e6db74">&#39;wip&#39;</span> -a      <span style="color:#75715e"># In case have uncommit work in current branch.</span>
+</span><span style="color:#75715e"></span><span style="color:#75715e">#!/bin/bash -x</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;CHK</span><span style="color:#66d9ef">$(</span>git branch|grep <span style="color:#e6db74">&#39; master&#39;</span> <span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> !<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;CHK&#34;</span> <span style="color:#f92672">]</span>;<span style="color:#66d9ef">then</span>
+    BASE_BRANCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;master&#34;</span>
+<span style="color:#66d9ef">elif</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;CHK</span><span style="color:#66d9ef">$(</span>git branch|grep <span style="color:#e6db74">&#39; main&#39;</span> <span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> !<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;CHK&#34;</span> <span style="color:#f92672">]</span>;<span style="color:#66d9ef">then</span>
+    BASE_BRANCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;main&#34;</span>
+<span style="color:#66d9ef">else</span>
+    BASE_BRANCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;base&#34;</span>
+<span style="color:#66d9ef">fi</span>
+git commit  -m<span style="color:#e6db74">&#39;wip&#39;</span> -a
 git fetch <span style="color:#f92672">||</span> exit <span style="color:#ae81ff">1</span>
 git fetch upstream <span style="color:#f92672">||</span> exit <span style="color:#ae81ff">1</span>
-git checkout master <span style="color:#f92672">||</span> exit <span style="color:#ae81ff">1</span>
-git reset --hard upstream/master
-git push origin +master
-</code></pre></div><p>Now create save script as <code>rebase</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash -xe
+git checkout $BASE_BRANCH <span style="color:#f92672">||</span> exit <span style="color:#ae81ff">1</span>
+git reset --hard upstream/$BASE_BRANCH
+git push origin +$BASE_BRANCH
+</code></pre></div><p>Now create script as <code>rebase</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash -e
 </span><span style="color:#75715e"></span>
 CUR_BRANCH<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>git rev-parse --abbrev-ref HEAD<span style="color:#e6db74">`</span>
+<span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;CHK</span><span style="color:#66d9ef">$(</span>git branch|grep <span style="color:#e6db74">&#39; master&#39;</span> <span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> !<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;CHK&#34;</span> <span style="color:#f92672">]</span>;<span style="color:#66d9ef">then</span>
+    BASE_BRANCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;master&#34;</span>
+<span style="color:#66d9ef">elif</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;CHK</span><span style="color:#66d9ef">$(</span>git branch|grep <span style="color:#e6db74">&#39; main&#39;</span> <span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span> !<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;CHK&#34;</span> <span style="color:#f92672">]</span>;<span style="color:#66d9ef">then</span>
+    BASE_BRANCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;main&#34;</span>
+<span style="color:#66d9ef">else</span>
+    BASE_BRANCH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;base&#34;</span>
+<span style="color:#66d9ef">fi</span>
 
 <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;CHK</span>$CUR_BRANCH<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;CHK&#34;</span> <span style="color:#f92672">]</span>;<span style="color:#66d9ef">then</span>
     echo <span style="color:#e6db74">&#34;Failed to get current branch name&#34;</span>
@@ -91,7 +107,7 @@ CUR_BRANCH<span style="color:#f92672">=</span><span style="color:#e6db74">`</spa
 
 git_sync_upstream
 git checkout $CUR_BRANCH
-git rebase upstream/master
+git rebase $BASE_BRANCH
 git push --force
 </code></pre></div>
     </div>

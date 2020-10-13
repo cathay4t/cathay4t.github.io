@@ -6,14 +6,17 @@
     <description>Recent content on Blog of Gris</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 03 Jun 2020 10:55:16 +0800</lastBuildDate><atom:link href="https://blog.grisge.info/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 13 Oct 2020 22:00:14 +0800</lastBuildDate><atom:link href="https://blog.grisge.info/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Nispor: Varlink interface for querying network state</title>
       <link>https://blog.grisge.info/posts/nispor_intro/</link>
-      <pubDate>Wed, 03 Jun 2020 10:55:16 +0800</pubDate>
+      <pubDate>Tue, 13 Oct 2020 22:00:14 +0800</pubDate>
       
       <guid>https://blog.grisge.info/posts/nispor_intro/</guid>
-      <description>WIP</description>
+      <description>After battling with Linux Network APIs, I decided to create rust project providing a state describing API for querying linux kernel network state.
+The new project is named as Nispor, in the short of Network Inspector.
+Why Nispor In short, existing solutions is not simple enough:
+  iproute The iproute provides json output, but command line output cannot be really called as a library considering the risk of changing format or string.</description>
     </item>
     
     <item>

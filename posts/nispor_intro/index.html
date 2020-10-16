@@ -3,7 +3,7 @@
   <head>
     <title>Nispor: Varlink interface for querying network state // Blog of Gris</title>
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.76.4" />
+    <meta name="generator" content="Hugo 0.76.5" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Gris Ge &lt;cnfourt@gmail.com&gt;" />
     <meta name="description" content="" />
@@ -119,49 +119,41 @@ network state among sysfs folders is time consuming work.</p>
 </ul>
 <h2 id="how-it-looks-like">How it looks like</h2>
 <p>The output of <code>npc bond99</code> would be:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;bond99&#34;</span>,
-  <span style="color:#f92672">&#34;iface_type&#34;</span>: <span style="color:#e6db74">&#34;Bond&#34;</span>,
-  <span style="color:#f92672">&#34;state&#34;</span>: <span style="color:#e6db74">&#34;Up&#34;</span>,
-  <span style="color:#f92672">&#34;mtu&#34;</span>: <span style="color:#ae81ff">1500</span>,
-  <span style="color:#f92672">&#34;flags&#34;</span>: [
-    <span style="color:#e6db74">&#34;Broadcast&#34;</span>,
-    <span style="color:#e6db74">&#34;LowerUp&#34;</span>,
-    <span style="color:#e6db74">&#34;Controller&#34;</span>,
-    <span style="color:#e6db74">&#34;Multicast&#34;</span>,
-    <span style="color:#e6db74">&#34;Running&#34;</span>,
-    <span style="color:#e6db74">&#34;Up&#34;</span>
-  ],
-  <span style="color:#f92672">&#34;ipv6&#34;</span>: {
-    <span style="color:#f92672">&#34;addresses&#34;</span>: [
-      {
-        <span style="color:#f92672">&#34;address&#34;</span>: <span style="color:#e6db74">&#34;fe80::942c:a7ff:fe56:683c&#34;</span>,
-        <span style="color:#f92672">&#34;prefix_len&#34;</span>: <span style="color:#ae81ff">64</span>,
-        <span style="color:#f92672">&#34;valid_lft&#34;</span>: <span style="color:#e6db74">&#34;forever&#34;</span>,
-        <span style="color:#f92672">&#34;preferred_lft&#34;</span>: <span style="color:#e6db74">&#34;forever&#34;</span>
-      }
-    ]
-  },
-  <span style="color:#f92672">&#34;mac_address&#34;</span>: <span style="color:#e6db74">&#34;96:2C:A7:56:68:3C&#34;</span>,
-  <span style="color:#f92672">&#34;bond&#34;</span>: {
-    <span style="color:#f92672">&#34;subordinates&#34;</span>: [
-      <span style="color:#e6db74">&#34;eth1&#34;</span>,
-      <span style="color:#e6db74">&#34;eth2&#34;</span>
-    ],
-    <span style="color:#f92672">&#34;mode&#34;</span>: <span style="color:#e6db74">&#34;balance-rr&#34;</span>,
-    <span style="color:#f92672">&#34;miimon&#34;</span>: <span style="color:#ae81ff">0</span>,
-    <span style="color:#f92672">&#34;updelay&#34;</span>: <span style="color:#ae81ff">0</span>,
-    <span style="color:#f92672">&#34;downdelay&#34;</span>: <span style="color:#ae81ff">0</span>,
-    <span style="color:#f92672">&#34;use_carrier&#34;</span>: <span style="color:#66d9ef">true</span>,
-    <span style="color:#f92672">&#34;arp_interval&#34;</span>: <span style="color:#ae81ff">0</span>,
-    <span style="color:#f92672">&#34;arp_all_targets&#34;</span>: <span style="color:#e6db74">&#34;any&#34;</span>,
-    <span style="color:#f92672">&#34;arp_validate&#34;</span>: <span style="color:#e6db74">&#34;none&#34;</span>,
-    <span style="color:#f92672">&#34;resend_igmp&#34;</span>: <span style="color:#ae81ff">1</span>,
-    <span style="color:#f92672">&#34;all_subordinates_active&#34;</span>: <span style="color:#e6db74">&#34;dropped&#34;</span>,
-    <span style="color:#f92672">&#34;packets_per_subordinate&#34;</span>: <span style="color:#ae81ff">1</span>,
-    <span style="color:#f92672">&#34;peer_notif_delay&#34;</span>: <span style="color:#ae81ff">0</span>
-  }
-}
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">bond99</span>
+  <span style="color:#f92672">iface_type</span>: <span style="color:#ae81ff">Bond</span>
+  <span style="color:#f92672">state</span>: <span style="color:#ae81ff">Up</span>
+  <span style="color:#f92672">mtu</span>: <span style="color:#ae81ff">1500</span>
+  <span style="color:#f92672">flags</span>:
+    - <span style="color:#ae81ff">Broadcast</span>
+    - <span style="color:#ae81ff">LowerUp</span>
+    - <span style="color:#ae81ff">Controller</span>
+    - <span style="color:#ae81ff">Multicast</span>
+    - <span style="color:#ae81ff">Running</span>
+    - <span style="color:#ae81ff">Up</span>
+  <span style="color:#f92672">ipv6</span>:
+    <span style="color:#f92672">addresses</span>:
+      - <span style="color:#f92672">address</span>: <span style="color:#e6db74">&#34;fe80::942c:a7ff:fe56:683c&#34;</span>
+        <span style="color:#f92672">prefix_len</span>: <span style="color:#ae81ff">64</span>
+        <span style="color:#f92672">valid_lft</span>: <span style="color:#ae81ff">forever</span>
+        <span style="color:#f92672">preferred_lft</span>: <span style="color:#ae81ff">forever</span>
+  <span style="color:#f92672">mac_address</span>: <span style="color:#e6db74">&#34;96:2C:A7:56:68:3C&#34;</span>
+  <span style="color:#f92672">bond</span>:
+    <span style="color:#f92672">subordinates</span>:
+      - <span style="color:#ae81ff">eth1</span>
+      - <span style="color:#ae81ff">eth2</span>
+    <span style="color:#f92672">mode</span>: <span style="color:#ae81ff">balance-rr</span>
+    <span style="color:#f92672">miimon</span>: <span style="color:#ae81ff">0</span>
+    <span style="color:#f92672">updelay</span>: <span style="color:#ae81ff">0</span>
+    <span style="color:#f92672">downdelay</span>: <span style="color:#ae81ff">0</span>
+    <span style="color:#f92672">use_carrier</span>: <span style="color:#66d9ef">true</span>
+    <span style="color:#f92672">arp_interval</span>: <span style="color:#ae81ff">0</span>
+    <span style="color:#f92672">arp_all_targets</span>: <span style="color:#ae81ff">any</span>
+    <span style="color:#f92672">arp_validate</span>: <span style="color:#ae81ff">none</span>
+    <span style="color:#f92672">resend_igmp</span>: <span style="color:#ae81ff">1</span>
+    <span style="color:#f92672">all_subordinates_active</span>: <span style="color:#ae81ff">dropped</span>
+    <span style="color:#f92672">packets_per_subordinate</span>: <span style="color:#ae81ff">1</span>
+    <span style="color:#f92672">peer_notif_delay</span>: <span style="color:#ae81ff">0</span>
 </code></pre></div><h2 id="future-of-nispor">Future of Nispor</h2>
 <p>I am hoping nispor could provide sufficient features for its command line tool
 &ndash; <code>npc</code> could be drop-in replacement of <code>iproute</code>.</p>

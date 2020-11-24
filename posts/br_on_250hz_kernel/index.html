@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>250HZ kernel Will Act Differently for Linux Bridge // Blog of Gris</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.78.2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Gris Ge &lt;cnfourt@gmail.com&gt;" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://blog.grisge.info/css/main.min.f4a4366db10002f954ba7c99eb4bd8ff403cc3f02a5115a04738873607cfc0d4.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="250HZ kernel Will Act Differently for Linux Bridge"/>
+<meta name="twitter:description" content="When playing with Linux Bridge in Ubuntu 18.04(Travis CI), I noticed the default value of multicast_startup_query_interval option is 3124 while RHEL/Fedora is 3125:
+ Ubuntu 18.04  fge@ubt1804:~$ sudo ip link add br0 type bridge fge@ubt1804:~$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval 3124  RHEL 8.3  [fge@el8 ~]$ sudo ip link add br0 type bridge [fge@el8 ~]$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval 3125 After debug, I confirmed this is caused by integer round up at two places:"/>
+
+    <meta property="og:title" content="250HZ kernel Will Act Differently for Linux Bridge" />
+<meta property="og:description" content="When playing with Linux Bridge in Ubuntu 18.04(Travis CI), I noticed the default value of multicast_startup_query_interval option is 3124 while RHEL/Fedora is 3125:
+ Ubuntu 18.04  fge@ubt1804:~$ sudo ip link add br0 type bridge fge@ubt1804:~$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval 3124  RHEL 8.3  [fge@el8 ~]$ sudo ip link add br0 type bridge [fge@el8 ~]$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval 3125 After debug, I confirmed this is caused by integer round up at two places:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.grisge.info/posts/br_on_250hz_kernel/" />
+<meta property="article:published_time" content="2020-11-24T19:44:29+08:00" />
+<meta property="article:modified_time" content="2020-11-24T19:44:29+08:00" />
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://blog.grisge.info/"><img class="app-header-avatar" src="/avatar.png" alt="Gris Ge &lt;cnfourt@gmail.com&gt;" /></a>
+      <h1>Blog of Gris</h1>
+      <p>Some people dream of success, while other people get up every morning and make it happen.</p>
+      <div class="app-header-social">
+        
+          <a target="_blank" href="https://github.com/cathay4t" rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">250HZ kernel Will Act Differently for Linux Bridge</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Nov 24, 2020
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          2 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p>When playing with Linux Bridge in Ubuntu 18.04(Travis CI), I noticed
+the default value of <code>multicast_startup_query_interval</code> option is 3124 while
+RHEL/Fedora is 3125:</p>
+<ul>
+<li>Ubuntu 18.04</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">fge@ubt1804:~$ sudo ip link add br0 type bridge
+fge@ubt1804:~$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval
+<span style="color:#ae81ff">3124</span>
+</code></pre></div><ul>
+<li>RHEL 8.3</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#f92672">[</span>fge@el8 ~<span style="color:#f92672">]</span>$ sudo ip link add br0 type bridge
+<span style="color:#f92672">[</span>fge@el8 ~<span style="color:#f92672">]</span>$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval
+<span style="color:#ae81ff">3125</span>
+</code></pre></div><p>After debug, I confirmed this is caused by integer round up at two places:</p>
+<ul>
+<li>Default value setter: <code>125 * HZ / 4</code></li>
+<li><code>jiffies_to_clock_t()</code></li>
+</ul>
+<p>The default value of <code>multicast_startup_query_interval</code> in kernel jiffies:</p>
+<ul>
+<li>Ubuntu 18.04, the kernel is holding <code>7812</code> rounded from <code>7812.5</code>.</li>
+<li>RHEL 8.3, the kernel is holding <code>31250</code>, no round up.</li>
+</ul>
+<p>When showing via sysfs, kernel use <code>jiffies_to_clock_t()</code>, both 250HZ and
+1000HZ kernel uses:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">NSEC_PER_SEC <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000000000L</span>
+clock_t <span style="color:#f92672">=</span> jiffies <span style="color:#f92672">*</span> ((NSEC_PER_SEC <span style="color:#f92672">+</span> hz <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>) <span style="color:#f92672">/</span> HZ ) <span style="color:#f92672">/</span> (NSEC_PER_SEC <span style="color:#f92672">/</span> USER_HZ))
+</code></pre></div><p>Above formation will generate 3124 with 7812 jiffies on <code>250HZ</code> kernel and
+100HZ(hard coded) <code>USER_HZ</code>.</p>
+<p>Below python script could check the maximum deviation caused by round up
+of <code>jiffies_to_clock_t()</code> in 250HZ kernel.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python3</span>
+
+NSEC_PER_SEC <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">**</span> <span style="color:#ae81ff">9</span>
+MAX_U64 <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">**</span> <span style="color:#ae81ff">64</span>
+
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">jiffies_to_clock_t</span>(user_hz, hz, jiffies):
+    tick_nsec <span style="color:#f92672">=</span> int((NSEC_PER_SEC <span style="color:#f92672">+</span> int(hz <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>)) <span style="color:#f92672">/</span> hz)
+    <span style="color:#66d9ef">if</span> (tick_nsec <span style="color:#f92672">%</span> (NSEC_PER_SEC <span style="color:#f92672">/</span> user_hz)) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        <span style="color:#66d9ef">if</span> hz <span style="color:#f92672">&lt;</span> user_hz:
+            <span style="color:#66d9ef">return</span> int(jiffies <span style="color:#f92672">*</span> (user_hz <span style="color:#f92672">/</span> hz))
+        <span style="color:#66d9ef">else</span>:
+            <span style="color:#66d9ef">return</span> int(jiffies <span style="color:#f92672">/</span> (hz <span style="color:#f92672">/</span> user_hz))
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">return</span> int(jiffies <span style="color:#f92672">*</span> tick_nsec <span style="color:#f92672">/</span> (NSEC_PER_SEC <span style="color:#f92672">/</span> user_hz))
+
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">clock_t_to_jiffies</span>(user_hz, hz, clock):
+    <span style="color:#66d9ef">if</span> hz <span style="color:#f92672">%</span> user_hz <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        <span style="color:#66d9ef">if</span> clock <span style="color:#f92672">&gt;=</span> MAX_U64 <span style="color:#f92672">/</span> (hz <span style="color:#f92672">/</span> user_hz):
+            <span style="color:#66d9ef">return</span> MAX_U64
+        <span style="color:#66d9ef">return</span> int(clock <span style="color:#f92672">*</span> (hz <span style="color:#f92672">/</span> user_hz))
+    <span style="color:#66d9ef">if</span> clock <span style="color:#f92672">&gt;=</span> MAX_U64 <span style="color:#f92672">/</span> hz <span style="color:#f92672">*</span> user_hz:
+        <span style="color:#66d9ef">return</span> MAX_U64
+    <span style="color:#66d9ef">return</span> int(clock <span style="color:#f92672">*</span> hz <span style="color:#f92672">/</span> user_hz)
+
+
+max_deviation <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">for</span> original_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span> <span style="color:#f92672">**</span> <span style="color:#ae81ff">32</span>):
+    <span style="color:#66d9ef">if</span> original_num <span style="color:#f92672">%</span> <span style="color:#ae81ff">100000</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        <span style="color:#66d9ef">print</span>(
+            f<span style="color:#e6db74">&#34;Tested {original_num} and found max_deviation: {max_deviation}&#34;</span>
+        )
+    user_hz <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+    hz <span style="color:#f92672">=</span> <span style="color:#ae81ff">250</span>
+    new_num <span style="color:#f92672">=</span> jiffies_to_clock_t(
+        user_hz, hz, clock_t_to_jiffies(user_hz, hz, original_num)
+    )
+    a <span style="color:#f92672">=</span> abs(original_num <span style="color:#f92672">-</span> new_num)
+    <span style="color:#66d9ef">if</span> a <span style="color:#f92672">&gt;</span> max_deviation:
+        max_deviation <span style="color:#f92672">=</span> a
+        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;{original_num}: {max_deviation}&#34;</span>)
+
+<span style="color:#66d9ef">print</span>(max_deviation)
+</code></pre></div>
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

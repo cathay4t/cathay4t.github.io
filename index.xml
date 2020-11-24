@@ -6,7 +6,17 @@
     <description>Recent content on Blog of Gris</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 13 Oct 2020 22:00:14 +0800</lastBuildDate><atom:link href="https://blog.grisge.info/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 24 Nov 2020 19:44:29 +0800</lastBuildDate><atom:link href="https://blog.grisge.info/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>250HZ kernel Will Act Differently for Linux Bridge</title>
+      <link>https://blog.grisge.info/posts/br_on_250hz_kernel/</link>
+      <pubDate>Tue, 24 Nov 2020 19:44:29 +0800</pubDate>
+      
+      <guid>https://blog.grisge.info/posts/br_on_250hz_kernel/</guid>
+      <description>When playing with Linux Bridge in Ubuntu 18.04(Travis CI), I noticed the default value of multicast_startup_query_interval option is 3124 while RHEL/Fedora is 3125:
+ Ubuntu 18.04  fge@ubt1804:~$ sudo ip link add br0 type bridge fge@ubt1804:~$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval 3124  RHEL 8.3  [fge@el8 ~]$ sudo ip link add br0 type bridge [fge@el8 ~]$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval 3125 After debug, I confirmed this is caused by integer round up at two places:</description>
+    </item>
+    
     <item>
       <title>Nispor: Varlink interface for querying network state</title>
       <link>https://blog.grisge.info/posts/nispor_intro/</link>

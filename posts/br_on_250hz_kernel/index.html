@@ -20,8 +20,8 @@
  Ubuntu 18.04  fge@ubt1804:~$ sudo ip link add br0 type bridge fge@ubt1804:~$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval 3124  RHEL 8.3  [fge@el8 ~]$ sudo ip link add br0 type bridge [fge@el8 ~]$ cat /sys/class/net/br0/bridge/multicast_startup_query_interval 3125 After debug, I confirmed this is caused by integer round up at two places:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.grisge.info/posts/br_on_250hz_kernel/" />
-<meta property="article:published_time" content="2020-11-24T19:44:29+08:00" />
-<meta property="article:modified_time" content="2020-11-24T19:44:29+08:00" />
+<meta property="article:published_time" content="2020-11-24T21:44:41+08:00" />
+<meta property="article:modified_time" content="2020-11-24T21:44:41+08:00" />
 
 
   </head>
@@ -94,7 +94,8 @@ clock_t <span style="color:#f92672">=</span> jiffies <span style="color:#f92672"
 </code></pre></div><p>Above formation will generate 3124 with 7812 jiffies on <code>250HZ</code> kernel and
 100HZ(hard coded) <code>USER_HZ</code>.</p>
 <p>Below python script could check the maximum deviation caused by round up
-of <code>jiffies_to_clock_t()</code> in 250HZ kernel.</p>
+of <code>jiffies_to_clock_t()</code> in 250HZ kernel. I only found the maximum deviation
+as 1 for a very long exhaustion.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">#!/usr/bin/python3</span>
 
 NSEC_PER_SEC <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">**</span> <span style="color:#ae81ff">9</span>

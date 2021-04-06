@@ -3,7 +3,7 @@
   <head>
     <title>Thinkpad: Turnoff the mic mute, sound mute and power button LEDs // Blog of Gris</title>
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.78.2" />
+    <meta name="generator" content="Hugo 0.82.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Gris Ge &lt;cnfourt@gmail.com&gt;" />
     <meta name="description" content="" />
@@ -17,9 +17,10 @@
     <meta property="og:title" content="Thinkpad: Turnoff the mic mute, sound mute and power button LEDs" />
 <meta property="og:description" content="Thinkpad: Turnoff the mic mute, sound mute and power button LEDs #!/bin/bash SYSFS_THINKPAD_LED=&#34;/sys/devices/platform/thinkpad_acpi/leds&#34; for LED in platform::mute platform::micmute tpacpi::power; do echo 0 | sudo tee &#34;$SYSFS_THINKPAD_LED/$LED/brightness&#34; done " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://blog.grisge.info/posts/disable_thinkpad_leds/" />
-<meta property="article:published_time" content="2020-02-28T08:09:14+08:00" />
-<meta property="article:modified_time" content="2020-02-28T08:09:14+08:00" />
+<meta property="og:url" content="https://blog.grisge.info/posts/disable_thinkpad_leds/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-02-28T08:09:14&#43;08:00" />
+<meta property="article:modified_time" content="2020-02-28T08:09:14&#43;08:00" />
+
 
 
   </head>

@@ -1,48 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
     <loc>https://blog.grisge.info/posts/br_on_250hz_kernel/</loc>
     <lastmod>2020-11-24T21:44:41+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://blog.grisge.info/</loc>
     <lastmod>2020-11-24T21:44:41+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://blog.grisge.info/posts/</loc>
     <lastmod>2020-11-24T21:44:41+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://blog.grisge.info/posts/nispor_intro/</loc>
     <lastmod>2020-10-13T22:00:14+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://blog.grisge.info/posts/git_rebase_and_sync_with_upstream/</loc>
     <lastmod>2020-03-19T01:04:35+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://blog.grisge.info/posts/disable_thinkpad_leds/</loc>
     <lastmod>2020-02-28T08:09:14+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://blog.grisge.info/posts/ipv6_autoconf_in_linux/</loc>
     <lastmod>2019-02-22T23:55:13+08:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://blog.grisge.info/categories/</loc>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://blog.grisge.info/tags/</loc>
   </url>
-  
 </urlset>

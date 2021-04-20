@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-us">
   <head>
-    <title>Nispor: Varlink interface for querying network state // Blog of Gris</title>
+    <title>Nispor: Unified interface for querying network state // Blog of Gris</title>
     <meta charset="utf-8" />
     <meta name="generator" content="Hugo 0.82.0" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,13 +11,13 @@
 
     
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Nispor: Varlink interface for querying network state"/>
+<meta name="twitter:title" content="Nispor: Unified interface for querying network state"/>
 <meta name="twitter:description" content="After battling with Linux Network APIs, I decided to create rust project providing a state describing API for querying linux kernel network state.
 The new project is named as Nispor, in the short of Network Inspector.
 Why Nispor In short, existing solutions is not simple enough:
   iproute The iproute provides json output, but command line output cannot be really called as a library considering the risk of changing format or string."/>
 
-    <meta property="og:title" content="Nispor: Varlink interface for querying network state" />
+    <meta property="og:title" content="Nispor: Unified interface for querying network state" />
 <meta property="og:description" content="After battling with Linux Network APIs, I decided to create rust project providing a state describing API for querying linux kernel network state.
 The new project is named as Nispor, in the short of Network Inspector.
 Why Nispor In short, existing solutions is not simple enough:
@@ -48,7 +48,7 @@ Why Nispor In short, existing solutions is not simple enough:
       
   <article class="post">
     <header class="post-header">
-      <h1 class ="post-title">Nispor: Varlink interface for querying network state</h1>
+      <h1 class ="post-title">Nispor: Unified interface for querying network state</h1>
       <div class="post-meta">
         <div>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
@@ -96,7 +96,6 @@ network state among sysfs folders is time consuming work.</p>
 <li>Rust crate.</li>
 <li>C binding written in rust</li>
 <li>Python binding written in Python using the c binding above.</li>
-<li>Varlink interface.</li>
 <li>Best effort on point-in-time consistence of network state.</li>
 <li>Command line tool for debugging or scripting.</li>
 <li>Supporting:

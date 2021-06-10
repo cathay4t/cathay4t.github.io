@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <title>Query Ethtool via Netlink Kernel Interface // Blog of Gris</title>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.83.1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Gris Ge &lt;cnfourt@gmail.com&gt;" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="https://blog.grisge.info/css/main.min.f4a4366db10002f954ba7c99eb4bd8ff403cc3f02a5115a04738873607cfc0d4.css" />
+
+    
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Query Ethtool via Netlink Kernel Interface"/>
+<meta name="twitter:description" content="Besides old ioctl interface of ethtool, the linux kernel also provides netlink interface for controlling ethtool.
+The existing documents does not serve me well on getting my work done, so I hope this blog could help others by demonstrate on querying ethtool PAUSE informations via netlink.
+The libnl has already provided many helper functions regarding communicating through generic netlink interface. But I think the understanding of every bits in netlink message is essential skill set of a good network developer."/>
+
+    <meta property="og:title" content="Query Ethtool via Netlink Kernel Interface" />
+<meta property="og:description" content="Besides old ioctl interface of ethtool, the linux kernel also provides netlink interface for controlling ethtool.
+The existing documents does not serve me well on getting my work done, so I hope this blog could help others by demonstrate on querying ethtool PAUSE informations via netlink.
+The libnl has already provided many helper functions regarding communicating through generic netlink interface. But I think the understanding of every bits in netlink message is essential skill set of a good network developer." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.grisge.info/posts/ethtool_netlink_intro/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-04-15T13:15:25&#43;08:00" />
+<meta property="article:modified_time" content="2021-04-15T13:15:25&#43;08:00" />
+
+
+
+  </head>
+  <body>
+    <header class="app-header">
+      <a href="https://blog.grisge.info/"><img class="app-header-avatar" src="/avatar.png" alt="Gris Ge &lt;cnfourt@gmail.com&gt;" /></a>
+      <h1>Blog of Gris</h1>
+      <p>Some people dream of success, while other people get up every morning and make it happen.</p>
+      <div class="app-header-social">
+        
+          <a target="_blank" href="https://github.com/cathay4t" rel="noreferrer noopener"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-github">
+  <title>github</title>
+  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+</svg></a>
+        
+      </div>
+    </header>
+    <main class="app-container">
+      
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">Query Ethtool via Netlink Kernel Interface</h1>
+      <div class="post-meta">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
+  <title>calendar</title>
+  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line>
+</svg>
+          Apr 15, 2021
+        </div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-clock">
+  <title>clock</title>
+  <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+</svg>
+          6 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <p>Besides old <code>ioctl</code> interface of ethtool, the linux kernel also provides
+<a href="https://www.kernel.org/doc/html/latest/networking/ethtool-netlink.html">netlink interface</a> for controlling ethtool.</p>
+<p>The existing documents does not serve me well on getting <a href="https://github.com/nispor/nispor/pull/118">my
+work</a> done, so I hope this blog could help others
+by demonstrate on querying ethtool PAUSE informations via netlink.</p>
+<p>The <a href="https://www.infradead.org/~tgr/libnl/">libnl</a> has already provided many helper functions
+regarding communicating through generic netlink interface. But I think
+the understanding of every bits in netlink message is essential skill set
+of a good network developer.</p>
+<h2 id="package-structure">Package structure</h2>
+<p>The ethtool is using <code>NETLINK_GENERIC</code> family of netlink with below
+data structure on each request and reply:</p>
+<pre><code>+-------------------------------------------------------------------+
+|                                                                   |
+|                   Netlink Header(struct nlmsghdr)                 |
+|                                                                   |
++-------------------------------------------------------------------+
+|                                                                   |
+|               Generic Netlink Header(struct genlmsghdr)           |
+|                                                                   |
++-------------------------------------------------------------------+
+|                                                                   |
+|                       Ethtool Attributes                          |
+|                                                                   |
++-------------------------------------------------------------------+
+                            .
+                            .
+                            .
+</code></pre><h3 id="netlink-header">Netlink Header</h3>
+<p>The netlink header <code>struct nlmsghdr</code> is holding <code>nlmsg_type</code> to differentiate
+which kernel module is responsible for processing this netlink request(the
+<a href="https://wireless.wiki.kernel.org/en/developers/documentation/nl80211">wifi nl80211</a> is also using <code>NETLINK_GENERIC</code>).
+In libnl and kernel code of generic netlink, this <code>nlmsg_type</code> is also called
+as Family ID.</p>
+<p>The ethtool netlink kernel module is required to register itself to get
+a family id/message type dynamically allocated.</p>
+<p>The user space program need to use the reserved <code>GENL_ID_CTRL</code> netlink message
+type/family id to find out the family ID they are interested. I will explain
+that in follow up sections.</p>
+<p>The netlink header also holds <code>flags</code> which is useful for ethtool netlink
+communication. The most commonly used flags for querying are:</p>
+<ul>
+<li><code>NLM_F_REQUEST</code>  &ndash; Mandatory for all request sending from user to kernel.</li>
+<li><code>NLM_F_DUMP</code> &ndash; Dump the information for all interfaces.</li>
+</ul>
+<h3 id="generic-netlink-header">Generic Netlink Header</h3>
+<p>The generic netlink header <code>struct genlmsghdr</code> is holding <code>cmd</code> to
+differentiate which function is responsible for processing this netlink
+request.</p>
+<p>For example, the <code>CTRL_CMD_GETFAMILY</code> is used to retrieve the netlink message
+type/family ID.</p>
+<h3 id="ethtool-attributes">Ethtool Attributes</h3>
+<p>The contents of ethtool netlink package after the generic netlink header
+is wrapped into nested(<code>NLA_F_NESTED</code>) netlink attribute(<code>struct nlattr</code>)
+including both the ethtool headers and contents.</p>
+<p>There could be multiple ethtool header included in single netlink
+request/reply. They are using these <code>nla_type</code>:</p>
+<ul>
+<li><code>ETHTOOL_A_HEADER_DEV_INDEX</code> &ndash; For interface index</li>
+<li><code>ETHTOOL_A_HEADER_DEV_NAME</code>  &ndash; For interface name</li>
+<li><code>ETHTOOL_A_HEADER_FLAGS</code>     &ndash; For flags</li>
+</ul>
+<p>For example, if you would like to request the ethtool PAUSE information of
+<code>sim0</code>. You need to include this netlink attribute after the generic netlink
+header:</p>
+<ul>
+<li>type: <code>ETHTOOL_A_HEADER_DEV_NAME</code></li>
+<li>payload: <code>sim0\0</code></li>
+</ul>
+<p>Even when you are dumping(<code>NLM_F_DUMP</code>) the information, you still
+need to include a empty netlink attribute:</p>
+<ul>
+<li>type: <code>ETHTOOL_A_PAUSE_HEADER | NLA_F_NESTED</code></li>
+<li>payload: <code>NULL</code></li>
+</ul>
+<h2 id="workflow">Workflow</h2>
+<p>Let me walk you through the whole ethool netlink interface by querying sim0&rsquo;s
+ethtool PAUSE option by a <a href="https://github.com/nispor/nispor/pull/118">userspace program</a>:</p>
+<ul>
+<li>Query the family ID of ethtool.</li>
+<li>Assemble the netlink message for querying PAUSE option.</li>
+<li>Send request to netlink socket.</li>
+<li>Parse the netlink reply message.</li>
+</ul>
+<p>Using netdevsim kernel module, you may simulate a network interface with
+ethtool PAUSE support via this script:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo modprobe netdevsim
+echo <span style="color:#e6db74">&#39;1 1&#39;</span> | sudo tee /sys/bus/netdevsim/new_device
+sleep <span style="color:#ae81ff">10</span>
+sudo ip link set eni1np1 name sim0
+sudo ethtool -A sim0 tx on
+sudo ethtool -A sim0 rx on
+</code></pre></div><h3 id="query-the-family-id-of-ethtool">Query the Family ID of Ethtool</h3>
+<p>To query the family ID of ethtool, you need:</p>
+<ul>
+<li>netlink header flag: <code>NLM_F_REQUEST</code></li>
+<li>netlink header message type: <code>GENL_ID_CTRL</code></li>
+<li>generic netlink header cmd: <code>CTRL_CMD_GETFAMILY</code></li>
+<li>generic netlink header version: <code>CTRL_CMD_GETFAMILY_VERSION</code></li>
+<li>netlink attribute type: <code>CTRL_ATTR_FAMILY_NAME</code></li>
+<li>netlink attribute payload: <code>sim0\0</code></li>
+</ul>
+<p>The message on wire send from userspace to kernel will be:</p>
+<pre><code># Netlink Header
+0x28 0x00 0x00 0x00         # totol netlink message length
+0x10 0x00 0x01 0x00         # 0x10 0x00: `GENL_ID_CTRL`
+                            # 0x01 0x00: flags: NLM_F_REQUEST
+0x00 0x00 0x00 0x00         # Sequence number
+0x00 0x00 0x00 0x00         # Sending process port ID
+
+# Generic Netlink Header
+0x03 0x01 0x00 0x00         # 0x03: CTRL_CMD_GETFAMILY
+                            # 0x01: CTRL_CMD_GETFAMILY_VERSION
+                            # 0x00 0x00: reserved
+
+# Netlink attribute - CTRL_ATTR_FAMILY_NAME
+0x14 0x00 0x02 0x00         # 0x14 0x00: lenth of this attribute
+                            # 0x02 0x00: CTRL_ATTR_FAMILY_NAME
+0x65 0x74 0x68 0x74         # C chars: e t h t
+0x6f 0x6f 0x6c 0x00         # C chars: o o l NULL
+0x00 0x00 0x00 0x00         # padding
+0x00 0x00 0x00 0x00         # padding
+</code></pre><p>The kernel will reply with a lot netlink attributes, one of them is:</p>
+<ul>
+<li>netlink attribute type: <code>CTRL_ATTR_FAMILY_NAME</code></li>
+<li>netlink attribute payload: 21(just example, might be different in your OS)</li>
+</ul>
+<p>The message on wire send from kernel to userspace is to large to explain
+in this blog. You may parse it like above.</p>
+<h3 id="assemble-the-netlink-message-for-querying-pause-option">Assemble the Netlink Message for Querying PAUSE Option</h3>
+<p>To query ethtool PAUSE options, you need:</p>
+<ul>
+<li>netlink header flag: <code>NLM_F_REQUEST</code></li>
+<li>netlink header message type: 21 (the number you get in previous step)</li>
+<li>generic netlink header cmd: <code>ETHTOOL_MSG_PAUSE_GET</code></li>
+<li>generic netlink header version: <code>ETHTOOL_GENL_VERSION</code></li>
+<li>netlink attribute type: <code>ETHTOOL_A_PAUSE_HEADER | NLA_F_NESTED</code></li>
+<li>netlink attribute payload: is another netlink attribute
+<ul>
+<li>netlink attribute type: <code>ETHTOOL_A_HEADER_DEV_NAME</code></li>
+<li>netlink attribute payload: <code>sim0\0</code></li>
+</ul>
+</li>
+</ul>
+<p>The message on wire send from userspace to kernel will be:</p>
+<pre><code># Netlink header
+0x24 0x00 0x00 0x00         # length of netlink message
+0x15 0x00 0x01 0x00         # 0x15 0x00: family ID 21
+                            # 0x01 0x00: flags: NLM_F_REQUEST
+0x00 0x00 0x00 0x00         # Sequence number
+0x00 0x00 0x00 0x00         # Sending process port ID
+
+# Generic Netlink Header
+0x15 0x01 0x00 0x00         # 0x15: `ETHTOOL_MSG_PAUSE_GET`
+                            # 0x01: `ETHTOOL_GENL_VERSION`
+                            # 0x00 0x00: reserved
+
+# Netlink attribute - ethtool header ETHTOOL_A_PAUSE_HEADER
+0x10 0x00 0x01 0x80         # 0x10 0x00: length 16
+                            # 0x01 0x80: `ETHTOOL_A_PAUSE_HEADER | NLA_F_NESTED`
+# Netlink attribute - ethtool header ETHTOOL_A_HEADER_DEV_NAME
+0x09 0x00 0x02 0x00         # 0x09 0x00: length 9 (without padding)
+                            # 0x02 0x00: `ETHTOOL_A_HEADER_DEV_NAME`
+0x73 0x69 0x6d 0x30         # c char: s i m 0
+0x00 0x00 0x00 0x00         # NULL and padding.
+</code></pre><h3 id="send-request-to-netlink-socket">Send Request to Netlink Socket.</h3>
+<p>You should:</p>
+<ul>
+<li>
+<p>Bind to <code>AF_NETLINK</code> socket with family ID 21(the number you retrieved in
+previous call).</p>
+</li>
+<li>
+<p>Send above netlink message to:</p>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">struct</span> sockaddr_nl {
+   sa_family_t     nl_family;  <span style="color:#75715e">/* AF_NETLINK */</span>
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">short</span>  nl_pad;     <span style="color:#75715e">/* Zero */</span>
+   pid_t           nl_pid;     <span style="color:#75715e">/* Port ID, should be 0 */</span>
+   __u32           nl_groups;  <span style="color:#75715e">/* Multicast groups mask, should be 0 */</span>
+};
+</code></pre></div><h3 id="parse-the-netlink-reply-message">Parse the Netlink Reply message.</h3>
+<p>The message on wire reply from kernel to use space will be:</p>
+<pre><code># Netlink Header
+0x44 0x00 0x00 0x00         # length of this message
+0x15 0x00 0x00 0x00         # 0x15 0x00: Family ID 21
+                            # flags: 0
+0x01 0x00 0x00 0x00         # sequence number, you may ignore it
+0x3c 0x05 0x88 0xb2         # Sending process port ID, you may ignore it
+
+# Generic Netlink Header
+0x16 0x01 0x00 0x00         # 0x16: `ETHTOOL_MSG_PAUSE_GET_REPLY`
+                            # 0x01: `ETHTOOL_GENL_VERSION`
+                            # 0x00 0x00: reserved
+
+# Netlink Attributes -- ethtool header
+0x18 0x00 0x01 0x80         # 0x18 0x00: lenth 24
+                            # 0x01 0x80: `ETHTOOL_A_PAUSE_HEADER | NLA_F_NESTED`
+
+# Netlink Attributes -- ethtool header ETHTOOL_A_HEADER_DEV_INDEX
+0x08 0x00 0x01 0x00         # 0x08 0x00: length 8
+                            # 0x01 0x00: `ETHTOOL_A_HEADER_DEV_INDEX`
+0x0b 0x00 0x00 0x00         # 0x0b 0x00, 0x00, 0x00: interface index 11
+
+# Netlink Attributes -- ethtool header ETHTOOL_A_HEADER_DEV_NAME
+0x09 0x00 0x02 0x00         # 0x09 0x00: length 9(without padding)
+                            # 0x02 0x00: `ETHTOOL_A_HEADER_DEV_NAME`
+0x73 0x69 0x6d 0x30         # c char: sim0
+0x00 0x00 0x00 0x00         # NULL and padding. nested header ends at 24 length
+
+# Netlink Attributes -- ethtool header ETHTOOL_A_PAUSE_AUTONEG
+0x05 0x00 0x02 0x00         # 0x05 0x00: lenth 5(without padding)
+                            # 0x02 0x00: ETHTOOL_A_PAUSE_AUTONEG
+
+# Netlink Attributes -- ethtool header ETHTOOL_A_PAUSE_RX
+0x00 0x00 0x00 0x00         # u8 payload: FALSE and padding
+0x05 0x00 0x03 0x00         # 0x05 0x00: lenth 5(without padding)
+                            # 0x03 0x00: ETHTOOL_A_PAUSE_RX
+0x01 0x00 0x00 0x00         # u8 payload: TRUE and padding
+
+# Netlink Attributes -- ethtool header ETHTOOL_A_PAUSE_TX
+0x05 0x00 0x04 0x00         # 0x05 0x00: lenth 5(without padding)
+                            # 0x04 0x00: ETHTOOL_A_PAUSE_TX
+0x01 0x00 0x00 0x00         # u8 payload: TRUE and padding.
+</code></pre>
+    </div>
+    <div class="post-footer">
+      
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

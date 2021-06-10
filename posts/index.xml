@@ -6,7 +6,19 @@
     <description>Recent content in Posts on Blog of Gris</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Apr 2021 13:15:25 +0800</lastBuildDate><atom:link href="https://blog.grisge.info/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Jun 2021 16:20:06 +0800</lastBuildDate><atom:link href="https://blog.grisge.info/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Nmstate: Convert temporary iproute network configuration to persistent</title>
+      <link>https://blog.grisge.info/posts/nmstate_persistent_network/</link>
+      <pubDate>Thu, 10 Jun 2021 16:20:06 +0800</pubDate>
+      
+      <guid>https://blog.grisge.info/posts/nmstate_persistent_network/</guid>
+      <description>The network configuration done by iproute will be removed after reboot. People are using they own scripts or service to persistent their network configurations.
+Starting version 1.0, Nmstate supports converting network created by iproute to persistent with the help of Nispor and NetworkManager:
+ Nispor query current network configurations from kernel. Nmstate instruct NetworkManager to save the network configure in persistent way.  Only single command required:
+sudo nmstatectl show | sudo nmstatectl apply - Please been noted: bond in &amp;ldquo;active_backup&amp;rdquo; mode with fail_over_mac=active option does not allow MAC address been set explicitly, you need to remove it manually before asking nmstate to apply it:</description>
+    </item>
+    
     <item>
       <title>Query Ethtool via Netlink Kernel Interface</title>
       <link>https://blog.grisge.info/posts/ethtool_netlink_intro/</link>

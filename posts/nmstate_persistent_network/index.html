@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-us">
   <head>
-    <title>Nmstate: Convert temporary iproute network configuration to persistent // Blog of Gris</title>
+    <title>Nmstate: Convert temporary iproute network configuration to persist // Blog of Gris</title>
     <meta charset="utf-8" />
     <meta name="generator" content="Hugo 0.83.1" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,17 +11,17 @@
 
     
     <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Nmstate: Convert temporary iproute network configuration to persistent"/>
-<meta name="twitter:description" content="The network configuration done by iproute will be removed after reboot. People are using they own scripts or service to persistent their network configurations.
-Starting version 1.0, Nmstate supports converting network created by iproute to persistent with the help of Nispor and NetworkManager:
- Nispor query current network configurations from kernel. Nmstate instruct NetworkManager to save the network configure in persistent way.  Only single command required:
-sudo nmstatectl show | sudo nmstatectl apply - Please been noted: bond in &ldquo;active_backup&rdquo; mode with fail_over_mac=active option does not allow MAC address been set explicitly, you need to remove it manually before asking nmstate to apply it:"/>
+<meta name="twitter:title" content="Nmstate: Convert temporary iproute network configuration to persist"/>
+<meta name="twitter:description" content="The network configuration done by iproute will be removed after reboot. People are using they own scripts or service to persist their network configurations.
+Starting version 1.0, Nmstate supports converting network configuration created by iproute to persist with the help of Nispor and NetworkManager:
+ Nispor query current network configurations from kernel. Nmstate instruct NetworkManager to save the network configure in persistent way.  Only a single command required:
+sudo nmstatectl show | sudo nmstatectl apply - Please note: bond in &ldquo;active_backup&rdquo; mode with fail_over_mac=active option does not allow MAC address been set explicitly, you need to remove it manually before asking nmstate to apply it:"/>
 
-    <meta property="og:title" content="Nmstate: Convert temporary iproute network configuration to persistent" />
-<meta property="og:description" content="The network configuration done by iproute will be removed after reboot. People are using they own scripts or service to persistent their network configurations.
-Starting version 1.0, Nmstate supports converting network created by iproute to persistent with the help of Nispor and NetworkManager:
- Nispor query current network configurations from kernel. Nmstate instruct NetworkManager to save the network configure in persistent way.  Only single command required:
-sudo nmstatectl show | sudo nmstatectl apply - Please been noted: bond in &ldquo;active_backup&rdquo; mode with fail_over_mac=active option does not allow MAC address been set explicitly, you need to remove it manually before asking nmstate to apply it:" />
+    <meta property="og:title" content="Nmstate: Convert temporary iproute network configuration to persist" />
+<meta property="og:description" content="The network configuration done by iproute will be removed after reboot. People are using they own scripts or service to persist their network configurations.
+Starting version 1.0, Nmstate supports converting network configuration created by iproute to persist with the help of Nispor and NetworkManager:
+ Nispor query current network configurations from kernel. Nmstate instruct NetworkManager to save the network configure in persistent way.  Only a single command required:
+sudo nmstatectl show | sudo nmstatectl apply - Please note: bond in &ldquo;active_backup&rdquo; mode with fail_over_mac=active option does not allow MAC address been set explicitly, you need to remove it manually before asking nmstate to apply it:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.grisge.info/posts/nmstate_persistent_network/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-06-10T16:20:06&#43;08:00" />
@@ -48,7 +48,7 @@ sudo nmstatectl show | sudo nmstatectl apply - Please been noted: bond in &ldquo
       
   <article class="post">
     <header class="post-header">
-      <h1 class ="post-title">Nmstate: Convert temporary iproute network configuration to persistent</h1>
+      <h1 class ="post-title">Nmstate: Convert temporary iproute network configuration to persist</h1>
       <div class="post-meta">
         <div>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-calendar">
@@ -68,26 +68,26 @@ sudo nmstatectl show | sudo nmstatectl apply - Please been noted: bond in &ldquo
     </header>
     <div class="post-content">
       <p>The network configuration done by <a href="https://git.kernel.org/pub/scm/network/iproute2/iproute2.git">iproute</a> will be removed
-after reboot. People are using they own scripts or service to persistent their
+after reboot. People are using they own scripts or service to persist their
 network configurations.</p>
 <p>Starting version 1.0, <a href="https://nmstate.io/">Nmstate</a> supports converting network
-created by iproute to persistent with the help of <a href="https://github.com/nispor/nispor">Nispor</a> and
-<a href="https://networkmanager.dev/">NetworkManager</a>:</p>
+configuration created by iproute to persist with the help of
+<a href="https://github.com/nispor/nispor">Nispor</a> and <a href="https://networkmanager.dev/">NetworkManager</a>:</p>
 <ul>
 <li>Nispor query current network configurations from kernel.</li>
 <li>Nmstate instruct NetworkManager to save the network configure in persistent
 way.</li>
 </ul>
-<p>Only single command required:</p>
+<p>Only a single command required:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo nmstatectl show | sudo nmstatectl apply -
-</code></pre></div><p>Please been noted: bond in &ldquo;active_backup&rdquo; mode with <code>fail_over_mac=active</code>
+</code></pre></div><p>Please note: bond in &ldquo;active_backup&rdquo; mode with <code>fail_over_mac=active</code>
 option does not allow MAC address been set explicitly, you need to remove
 it manually before asking nmstate to apply it:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo nmstatectl show bond0 &gt; bond0.yml
 sed -i -e <span style="color:#e6db74">&#39;/mac-address/d&#39;</span> bond0.yml
 sudo nmstatectl apply bond0.yml
 </code></pre></div><h2 id="example">Example</h2>
-<p>Assume you create a bond and hope to persistent it.</p>
+<p>Assume you create a bond and hope to persist it.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo ip link add bond0 type bond
 echo <span style="color:#e6db74">&#39;active-backup&#39;</span> | sudo tee /sys/class/net/bond0/bonding/mode
 sudo ip link set eth1 down
